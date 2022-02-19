@@ -1,0 +1,44 @@
+[
+  {
+    "id": "my-rex",
+    "version": "v0.36.0-beta.4",
+    "upstream": {
+      "url": "http://192.168.1.5:8060",
+      "preserve_host": true,
+      "strip_path": "/api/v1"
+    },
+    "match": {
+      "methods": ["GET", "POST", "PUT", "DELETE"],
+      "url": "<https|http>://192.168.1.5:4455/<.*>"
+    },
+    "authenticators": [
+      {
+        "handler": "jwt",
+        "config": {
+          "jwks_urls": ["http://192.168.1.5:8090/.well-known/jwks.json"],
+          "scope_strategy": "none",
+          "allowed_algorithms": ["HS256"],
+          "token_from": {
+            "header": "Token"
+          }
+        }
+      }
+    ],
+    "authorizer": {
+      "handler": "allow"
+    },
+    "mutators": [
+      {
+        "handler": "noop"
+      }
+    ],
+    "errors": [
+      {
+        "handler": "json",
+        "config": {
+          "verbose": true
+        }
+      }
+    ]
+  }
+]

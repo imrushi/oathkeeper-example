@@ -1,0 +1,38 @@
+# serve:
+#   proxy:
+#     port: 4455 # run the proxy at port 4455
+#   api:
+#     port: 8080 # run the api at port 8080
+
+access_rules:
+  repositories:
+    - file://./rules.json
+
+errors:
+  fallback:
+    - json
+  handlers:
+    json:
+      enabled: true
+      config:
+        verbose: true
+
+authorizers:
+  allow:
+    enabled: true
+
+authenticators:
+  jwt:
+    enabled: true
+    config:
+        jwks_urls:
+          - http://192.168.1.5:8090/.well-known/jwks.json
+        scope_strategy: none
+        allowed_algorithms:
+          - HS256
+        token_from:
+          header: Token
+
+mutators:
+  noop:
+    enabled: true
